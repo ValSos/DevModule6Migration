@@ -19,6 +19,11 @@ public class DatabaseTest {
         ClientService clientService = new ClientService();
         System.out.println(clientService.create("Valeriia Sosyedka"));
         System.out.println(clientService.getById(2l));
+        clientService.setName(2,"Petro Petrenko");
+        System.out.println(clientService.getById(2l));
+        System.out.println(clientService.listAll());
+        clientService.deleteById(2l);
+        System.out.println(clientService.listAll());
 
     }
 }
