@@ -17,6 +17,8 @@ public class DatabaseTest {
         flyway.migrate();
 
         ClientService clientService = new ClientService();
+        clientService.deleteById(1l);
+        System.out.println(clientService.listAll());
         System.out.println(clientService.create("Valeriia Sosyedka"));
         System.out.println(clientService.getById(2l));
         clientService.setName(2,"Petro Petrenko");

@@ -13,7 +13,9 @@ public class ClientService {
     private PreparedStatement updateSt;
     private PreparedStatement deleteSt;
     private PreparedStatement selectSt;
+    private final PreparedStatement updateProjectSt;
     private final Connection connection;
+
 
     public ClientService() throws SQLException {
         connection = Database.getInstance().getConnection();
@@ -27,6 +29,8 @@ public class ClientService {
         deleteSt = connection
                 .prepareStatement("DELETE FROM client WHERE id = ?");
         selectSt = connection.prepareStatement("SELECT * FROM client");
+        updateProjectSt = connection
+                .prepareStatement("UPDATE project SET client_id = null WHERE client_id = ?");
 
     }
 
@@ -73,8 +77,25 @@ public class ClientService {
         if (id <= 0) {
             throw new IllegalArgumentException();
         }
-        deleteSt.setLong(1, id);
-        deleteSt.executeUpdate();
+
+        connection.setAutoCommit(false);
+        try {
+            updateProjectSt.setLong(1, id);
+            updateProjectSt.executeUpdate();
+
+            deleteSt.setLong(1, id);
+            deleteSt.executeUpdate();
+
+            connection.commit();
+        }
+        catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+        }
+
+
     }
 
     public List<Client> listAll() throws SQLException {

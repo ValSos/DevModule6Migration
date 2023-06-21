@@ -16,7 +16,7 @@ name VARCHAR(1000) NOT NULL CHECK (LENGTH(name) >= 2)
 CREATE TABLE project (
 id IDENTITY PRIMARY KEY,
 name VARCHAR(1000),
-client_id BIGINT NOT NULL,
+client_id BIGINT,
 start_date DATE,
 finish_date DATE,
 FOREIGN KEY (client_id) REFERENCES client(id)
